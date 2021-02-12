@@ -1,0 +1,11 @@
+.header_div {
+  width: 100%;
+  text-align: center;
+  background-color: #2196f3;
+  padding: 25px;
+}
+.header_logo {
+  color: #fff;
+  font-size: 1.9rem;
+  font-weight: normal;
+}
