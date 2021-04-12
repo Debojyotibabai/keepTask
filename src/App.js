@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import InputField from "./InputField";
 import Task from "./Task";
 import styles from "./App.module.css";
+import db from "./firebase";
 
 const App = () => {
   // input values
@@ -20,34 +21,30 @@ const App = () => {
     setInputDetail(e.target.value);
   };
 
-  // add items to task list
+  // add task to database
   const addTask = (e) => {
     e.preventDefault();
-    if (inputTitle === "" || inputDetail === "") {
-      alert("Please fill all fields!");
-    } else {
-      setTask(() => {
-        return [...task, { titleIs: inputTitle, detailIs: inputDetail }];
-      });
-      setInputTitle("");
-      setInputDetail("");
-    }
+    db.collection("posts").add({
+      title: inputTitle,
+      detail: inputDetail,
+    });
+    setInputTitle("");
+    setInputDetail("");
   };
 
-  // delete task card
-  const deleteTask = (index) => {
-    const newTask = [...task];
-    newTask.splice(index, 1);
-    setTask(newTask);
-  };
+  // set tasks from database on load
+  useEffect(() => {
+    db.collection("posts").onSnapshot((snapshot) =>
+      setTask(snapshot.docs.map((doc) => doc.data()))
+    );
+  }, []);
 
   // making cards of task
   const allTasks = task.map((eachTask, eachTaskIndex) => {
     return (
       <Task
-        title={eachTask.titleIs}
-        detail={eachTask.detailIs}
-        delete={deleteTask.bind(this, eachTaskIndex)}
+        title={eachTask.title}
+        detail={eachTask.detail}
         key={eachTaskIndex}
       />
     );
