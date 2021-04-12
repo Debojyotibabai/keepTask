@@ -39,12 +39,16 @@ const App = () => {
     );
   }, []);
 
+  // delete task from database
+  const deleteTask = () => {};
+
   // making cards of task
   const allTasks = task.map((eachTask, eachTaskIndex) => {
     return (
       <Task
         title={eachTask.title}
         detail={eachTask.detail}
+        delete={deleteTask}
         key={eachTaskIndex}
       />
     );
